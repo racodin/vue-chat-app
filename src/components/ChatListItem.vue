@@ -1,21 +1,19 @@
 <template>
-  <li class="chat-item">
+  <div class="chat-item">
     <div class="chat-img">
       <BaseAvatar
-        src="https://postfiles.pstatic.net/20160718_15/shmadle0510_1468805220543OHPbu_PNG/2016-07-18_10%3B25%3B29.PNG?type=w1"
-        width="30px"
-        height="30px"
+        :src="picture"
+        width="35px"
+        height="35px"
         shape="circle"
       />
     </div>
     <div class="chat-info">
-      <span class="chat-name">Nickname</span>
-      <span class="chat-date">2020.01.18</span>
+      <span class="chat-name">{{ nickname }}</span>
+      <span class="chat-date">{{ date }}</span>
     </div>
-    <div class="chat-msg">
-      chatting message
-    </div>
-  </li>
+    <div class="chat-msg">{{ msg }}</div>
+  </div>
 </template>
 
 <script>
@@ -24,6 +22,24 @@ export default {
   name: "ChatListItem",
   components: {
     BaseAvatar
+  },
+  props: {
+    picture: {
+      type: String,
+      default: ""
+    },
+    nickname: {
+      type: String,
+      default: ""
+    },
+    date: {
+      type: String,
+      default: ""
+    },
+    msg: {
+      type: String,
+      default: ""
+    },
   }
 };
 </script>
@@ -54,5 +70,7 @@ export default {
 .chat-msg {
   font-size: 12px;
   color: #666;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 </style>
