@@ -1,18 +1,13 @@
 <template>
   <div class="chat-item">
-    <div class="chat-img">
-      <BaseAvatar
-        :src="picture"
-        width="35px"
-        height="35px"
-        shape="circle"
-      />
+    <div v-if="picture" class="item-img">
+      <BaseAvatar :src="picture" width="35px" height="35px" shape="circle" />
     </div>
-    <div class="chat-info">
-      <span class="chat-name">{{ nickname }}</span>
-      <span class="chat-date">{{ date }}</span>
+    <div class="item-info">
+      <span v-if="name" class="item-name">{{ name }}</span>
+      <span v-if="date" class="item-date">{{ date }}</span>
+      <div class="item-massage">{{ message }}</div>
     </div>
-    <div class="chat-msg">{{ msg }}</div>
   </div>
 </template>
 
@@ -28,7 +23,7 @@ export default {
       type: String,
       default: ""
     },
-    nickname: {
+    name: {
       type: String,
       default: ""
     },
@@ -36,10 +31,10 @@ export default {
       type: String,
       default: ""
     },
-    msg: {
+    message: {
       type: String,
       default: ""
-    },
+    }
   }
 };
 </script>
@@ -47,30 +42,30 @@ export default {
 <style lang="scss" scoped>
 .chat-item {
   position: relative;
-  padding-left: 50px;
   list-style: none;
+  display: flex;
 }
-.chat-img {
-  position: absolute;
-  top: 0;
-  left: 0;
+.item-img {
+  position: relative;
+  top: 0.2rem;
+  flex: none;
+  margin-right: 0.8rem;
   overflow: hidden;
-  img {
-    width: 40px;
-    height: 40px;
-  }
 }
-.chat-name {
+.item-info {
+  position: relative;
+}
+.item-name {
   font-size: 12px;
 }
-.chat-date {
+.item-date {
   font-size: 11px;
   color: #999;
 }
-.chat-msg {
+.item-massage {
   font-size: 12px;
   color: #666;
-  word-break: keep-all;
-  word-wrap: break-word;
+  line-height: 1.2rem;
+  word-break: break-all;
 }
 </style>

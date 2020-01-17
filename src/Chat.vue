@@ -1,7 +1,8 @@
 <template>
   <div id="chat">
-    <ChatList :dataset="chatList"  />
-    <ChatInputText @submit="updateMessage" />
+    <ChatList :items="items" :addItem="item" />
+    <ChatInputText :limit="limit" @update="updateMessage" @submit="submitMessage" />
+    <ChatInputLimit :length="count" :limit="limit" />
     <ChatInputEmoji />
   </div>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import ChatList from "@/components/ChatList";
 import ChatInputText from "@/components/ChatInputText";
+import ChatInputLimit from "@/components/ChatInputLimit";
 import ChatInputEmoji from "@/components/ChatInputEmoji";
 
 export default {
@@ -16,32 +18,37 @@ export default {
   components: {
     ChatList,
     ChatInputText,
+    ChatInputLimit,
     ChatInputEmoji
   },
-  data(){
-    return {
-      chatList: [{
-        picture: "https://postfiles.pstatic.net/20160718_15/shmadle0510_1468805220543OHPbu_PNG/2016-07-18_10%3B25%3B29.PNG?type=w1",
-        name: "Nickname1",
-        date: "2020.01.18",
-        msg: "chatting message1"
-      }, {
-        picture: "",
-        name: "Nickname2",
-        date: "2020.01.19",
-        msg: "chatting message2"
-      }],
-      message: "Hi"
+  props: {
+    dataset: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
+  data() {
+    return {
+      count: 0,
+      limit: 50,
+      item: {},
+      items: this.dataset
+    };
+  },
   methods: {
-    updateMessage(value){
-      this.chatList.push({
+    updateMessage(value) {
+      this.count = value.length;
+    },
+    submitMessage(value) {
+      this.count = 0;
+      this.item = {
         picture: "",
         name: "Nickname2",
         date: "2020.01.19",
-        msg: value
-      })
+        message: value
+      };
     }
   }
 };
@@ -49,6 +56,8 @@ export default {
 
 <style lang="scss" scoped>
 #chat {
-  width: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 </style>
