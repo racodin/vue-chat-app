@@ -9,18 +9,33 @@
       :maxlength="limit"
       v-model="message"
       @input="update()"
-      @keypress.enter="check()"
+      @keypress.enter="enter()"
     />
   </div>
 </template>
 
 <script>
-/* 구현 목록
-  1. 도배방지 
-    - 이전글과 같은글을 반복할 경우 블럭
-    - 짧은 시간동안 많은 글들을 작성할 경우
-  2. 
-*/
+/**
+ * Enum for placeholder message.
+ * @readonly
+ * @enum {string}
+ */
+const Placeholer = Object.freeze({
+  DEFAULT: "Enter your message",
+  RESTRICT: "글쓰기가 잠시 제한되었습니다."
+});
+/**
+ * Enum for message block.
+ * @readonly
+ * @enum {number}
+ */
+const Block = Object.freeze({
+  COUNT: 5,
+  DELAY: 5000
+});
+
+import debounce from "@/utils/debounce.js";
+import examine from "@/utils/examine.js";
 export default {
   name: "ChatInputText",
   props: {
@@ -31,56 +46,61 @@ export default {
   },
   data() {
     return {
-      count: 0,
-      message: "",
       isTyping: true,
-      checkMessage: "",
+      message: "",
       placeholder: "",
-      placeholderText: {
-        default: "Enter your message",
-        repeat: "반복적인 글을 입력하였습니다.",
-        restrict: "글쓰기가 잠시 제한되었습니다."
-      },
-      block: {
-        count: 3,
-        delay: 1000
-      },
-      bannedWords: ["씨발", "병신", "아가리"]
+      repeatCount: 0
     };
   },
   mounted() {
     this.focus();
-    this.placeholder = this.placeholderText.default;
+    this.alert(Placeholer.DEFAULT);
+    this.resetCount = debounce(() => {
+      this.repeatCount = 0;
+    }, 500);
   },
   methods: {
     focus() {
       this.$refs.textInput.focus();
     },
-    check() {
-      this.bannedWords.forEach(word => {
-        if (this.message.indexOf(word) > -1) {
-          // let arr = [];
-          // for (let i = 0; i < word.length; i++) arr.push("*");
-          this.message = this.message.replace(word, "**");
-        }
+    enter() {
+      if (this.message == "") return;
+      this.repeatCount++;
+      this.resetCount();
+      if (this.repeatCount > Block.COUNT) {
+        this.disable();
+        setTimeout(() => {
+          this.enable();
+        }, Block.DELAY);
+      } else {
+        this.submit();
+      }
+    },
+    disable() {
+      this.isTyping = false;
+      this.alert(Placeholer.RESTRICT);
+      this.clear();
+      this.update();
+    },
+    enable() {
+      this.isTyping = true;
+      this.alert(Placeholer.DEFAULT);
+      this.$nextTick(() => {
+        this.focus();
       });
-      this.submit();
+    },
+    clear() {
       this.message = "";
     },
     alert(str) {
-      this.isTyping = false;
       this.placeholder = str;
-      setTimeout(() => {
-        this.isTyping = true;
-        this.placeholder = this.placeholderText.default;
-        this.$nextTick(() => this.focus());
-      }, 1000);
     },
     update() {
       this.$emit("update", this.message);
     },
     submit() {
-      this.$emit("submit", this.message);
+      this.$emit("submit", examine(this.message, "**"));
+      this.clear();
     }
   }
 };
