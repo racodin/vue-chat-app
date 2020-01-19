@@ -43,9 +43,13 @@ const BANNED_WORDS = ['10새', '10새기', '10새리', '10세리', '10쉐이', '
 ];
 
 function examine(str, character) {
+  if (typeof str != "string") {
+    return console.error("Type of " + typeof str + " is not allowed. Please use only string.");
+  }
+  let char = character || "**";
   BANNED_WORDS.forEach(item => {
     if (str.indexOf(item) > -1) {
-      str = str.replace(item, character);
+      str = str.replace(item, char);
     }
   });
   return str;
