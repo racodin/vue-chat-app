@@ -19,8 +19,7 @@ export default {
     return {
       chat: [
         {
-          picture:
-            "https://postfiles.pstatic.net/20160718_15/shmadle0510_1468805220543OHPbu_PNG/2016-07-18_10%3B25%3B29.PNG?type=w1",
+          picture: "",
           name: "Nickname1",
           date: "2020.01.18",
           message:
