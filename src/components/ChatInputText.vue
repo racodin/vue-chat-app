@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chat-input">
     <input
       class="text-input"
       type="text"
@@ -8,8 +8,8 @@
       :placeholder="this.placeholder"
       :maxlength="limit"
       v-model="message"
-      @input="update()"
-      @keypress.enter="enter()"
+      @input="update($event.target.value)"
+      @keypress.enter="send()"
     />
   </div>
 </template>
@@ -63,18 +63,11 @@ export default {
     focus() {
       this.$refs.textInput.focus();
     },
-    enter() {
-      if (this.message == "") return;
-      this.repeatCount++;
-      this.resetCount();
-      if (this.repeatCount > Block.COUNT) {
-        this.disable();
-        setTimeout(() => {
-          this.enable();
-        }, Block.DELAY);
-      } else {
-        this.submit();
-      }
+    clear() {
+      this.message = "";
+    },
+    alert(str) {
+      this.placeholder = str;
     },
     disable() {
       this.isTyping = false;
@@ -89,17 +82,24 @@ export default {
         this.focus();
       });
     },
-    clear() {
-      this.message = "";
+    send() {
+      if (this.message == "") return;
+      this.repeatCount++;
+      this.resetCount();
+      if (this.repeatCount > Block.COUNT) {
+        this.disable();
+        setTimeout(() => {
+          this.enable();
+        }, Block.DELAY);
+      } else {
+        this.submit();
+      }
     },
-    alert(str) {
-      this.placeholder = str;
-    },
-    update() {
-      this.$emit("update", this.message);
+    update(value) {
+      this.$emit("update", value);
     },
     submit() {
-      this.$emit("submit", examine(this.message, "**"));
+      this.$emit("submit", examine(this.message));
       this.clear();
     }
   }
@@ -107,10 +107,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chat-input {
+  position: relative;
+  width: 100%;
+}
 .text-input {
   position: relative;
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  outline: none;
+  &:focus {
+    border: 1px solid #2196f3;
+  }
 }
 </style>
