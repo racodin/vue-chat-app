@@ -1,5 +1,5 @@
 <template>
-  <div class="text-limit">{{ length }}/{{ limit }}</div>
+  <div class="chat-limit">{{ length }}/{{ limit }}</div>
 </template>
 
 <script>
@@ -19,9 +19,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-limit {
+.chat-limit {
   font-size: 12px;
-  text-align: right;
   color: #999;
 }
 </style>
