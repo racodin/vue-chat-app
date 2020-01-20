@@ -2,9 +2,9 @@
   <div id="chat">
     <ChatList :items="items" :addItem="item" />
     <div class="chat-panel">
-      <ChatInputText :limit="limit" @update="updateMessage" @submit="sendMessage" />
-      <ChatInputLimit :length="count" :limit="limit" />
-      <ChatInputEmoji />
+      <ChatInput :limit="limit" @update="updateMessage" @submit="sendMessage" />
+      <ChatLimit :length="count" :limit="limit" />
+      <ChatEmoji />
     </div>
   </div>
 </template>
@@ -12,17 +12,17 @@
 <script>
 import "@/utils/prototype";
 import ChatList from "@/components/ChatList";
-import ChatInputText from "@/components/ChatInputText";
-import ChatInputLimit from "@/components/ChatInputLimit";
-import ChatInputEmoji from "@/components/ChatInputEmoji";
+import ChatInput from "@/components/ChatInput";
+import ChatLimit from "@/components/ChatLimit";
+import ChatEmoji from "@/components/ChatEmoji";
 
 export default {
   name: "Chat",
   components: {
     ChatList,
-    ChatInputText,
-    ChatInputLimit,
-    ChatInputEmoji
+    ChatInput,
+    ChatLimit,
+    ChatEmoji
   },
   props: {
     dataset: {
