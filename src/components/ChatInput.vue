@@ -99,7 +99,7 @@ export default {
       }
     },
     update(value) {
-      this.message = emoji.replace_colons(this.$refs.textInput.value);
+      this.message = emoji.replace_colons(value);
       this.$emit("update", value);
     },
     submit() {
