@@ -33,9 +33,10 @@ const Block = Object.freeze({
   COUNT: 5,
   DELAY: 5000
 });
-
+let emoji = null;
 import debounce from "@/utils/debounce.js";
 import examine from "@/utils/examine.js";
+import EmojiConvertor from "@/utils/emoji.js";
 export default {
   name: "ChatInputText",
   props: {
@@ -53,6 +54,8 @@ export default {
     };
   },
   mounted() {
+    emoji = new EmojiConvertor();
+    emoji.replace_mode = "unified";
     this.focus();
     this.alert(Placeholer.DEFAULT);
     this.resetCount = debounce(() => {
@@ -96,6 +99,7 @@ export default {
       }
     },
     update(value) {
+      this.message = emoji.replace_colons(this.$refs.textInput.value);
       this.$emit("update", value);
     },
     submit() {
