@@ -1,6 +1,11 @@
 <template>
   <div class="chat-list">
-    <ul ref="chatScroller" class="chat-scroller" @scroll.passive="scrollEvent($event)">
+    <ul
+      ref="chatScroller"
+      class="chat-scroller"
+      @resize="scrollResize($event)"
+      @scroll.passive="scrollEvent($event)"
+    >
       <li v-for="item in itemList" :key="item.id">
         <ChatListItem
           :picture="item.picture"
@@ -10,10 +15,17 @@
         />
       </li>
     </ul>
-    <a href v-show="scrolled" @click.prevent="clickToBottom" class="chat-latest">
+    <a
+      href
+      v-show="scrolled"
+      @click.prevent="clickToBottom"
+      class="chat-latest"
+    >
       <svg viewBox="0 0 24 24">
         <g>
-          <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z" />
+          <path
+            d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+          />
         </g>
       </svg>
     </a>
@@ -50,7 +62,8 @@ export default {
     };
   },
   mounted() {
-    this.scrollObserver();
+    this.mutationObserver();
+    this.resizeObserver();
     this.scrollEvent = debounce(e => {
       let target = e.target;
       this.scrollTop = target.scrollTop;
@@ -64,7 +77,7 @@ export default {
     }
   },
   methods: {
-    scrollObserver() {
+    mutationObserver() {
       let el = this.$refs.chatScroller;
       new MutationObserver(e => {
         const CONFIG = {
@@ -92,6 +105,11 @@ export default {
         this.scrollToBottom(el, smooth);
       }).observe(el, { childList: true, subtree: true });
       this.scrollToBottom(el);
+    },
+    resizeObserver() {
+      new ResizeObserver(() => {
+        if (!this.scrolled) this.clickToBottom();
+      }).observe(this.$refs.chatScroller);
     },
     scrollToBottom(el, smooth) {
       if (typeof el.scroll === "function") {

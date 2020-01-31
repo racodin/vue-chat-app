@@ -43,6 +43,10 @@ export default {
     limit: {
       type: Number,
       default: 200
+    },
+    addEmoji: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -61,6 +65,12 @@ export default {
     this.resetCount = debounce(() => {
       this.repeatCount = 0;
     }, 500);
+  },
+  watch: {
+    addEmoji() {
+      this.message += this.addEmoji;
+      this.focus();
+    }
   },
   methods: {
     focus() {
