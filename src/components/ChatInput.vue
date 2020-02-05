@@ -1,11 +1,11 @@
 <template>
-  <div class="chat-input">
+  <div class="v-chat-entry">
     <input
-      class="text-input"
+      class="v-chat-input"
       type="text"
-      ref="textInput"
+      ref="input"
       :disabled="!isTyping"
-      :placeholder="this.placeholder"
+      :placeholder="placeholder"
       :maxlength="limit"
       v-model="message"
       @input="update($event.target.value)"
@@ -15,30 +15,12 @@
 </template>
 
 <script>
-/**
- * Enum for placeholder message.
- * @readonly
- * @enum {string}
- */
-const Placeholer = Object.freeze({
-  DEFAULT: "Enter your message",
-  RESTRICT: "글쓰기가 잠시 제한되었습니다."
-});
-/**
- * Enum for message block.
- * @readonly
- * @enum {number}
- */
-const Block = Object.freeze({
-  COUNT: 5,
-  DELAY: 5000
-});
-let emoji = null;
+import { PLACEHOLDER, BLOCK } from "@/constants/input.js";
 import debounce from "@/utils/debounce.js";
 import examine from "@/utils/examine.js";
 import EmojiConvertor from "@/utils/emoji.js";
 export default {
-  name: "ChatInputText",
+  name: "ChatInput",
   props: {
     limit: {
       type: Number,
@@ -54,14 +36,15 @@ export default {
       isTyping: true,
       message: "",
       placeholder: "",
-      repeatCount: 0
+      repeatCount: 0,
+      emoji: null
     };
   },
   mounted() {
-    emoji = new EmojiConvertor();
-    emoji.replace_mode = "unified";
+    this.emoji = new EmojiConvertor();
+    this.emoji.replace_mode = "unified";
     this.focus();
-    this.alert(Placeholer.DEFAULT);
+    this.alert(PLACEHOLDER.default);
     this.resetCount = debounce(() => {
       this.repeatCount = 0;
     }, 500);
@@ -74,7 +57,7 @@ export default {
   },
   methods: {
     focus() {
-      this.$refs.textInput.focus();
+      this.$refs.input.focus();
     },
     clear() {
       this.message = "";
@@ -82,35 +65,31 @@ export default {
     alert(str) {
       this.placeholder = str;
     },
-    disable() {
-      this.isTyping = false;
-      this.alert(Placeholer.RESTRICT);
-      this.clear();
-      this.update();
-    },
-    enable() {
-      this.isTyping = true;
-      this.alert(Placeholer.DEFAULT);
-      this.$nextTick(() => {
-        this.focus();
-      });
-    },
     send() {
-      if (this.message == "") return;
-      this.repeatCount++;
-      this.resetCount();
-      if (this.repeatCount > Block.COUNT) {
-        this.disable();
+      if (!this.message) return;
+      if (this.repeatCount >= BLOCK.count) {
+        this.isTyping = false;
+        this.clear();
+        this.update("");
+        this.alert(PLACEHOLDER.restrict);
         setTimeout(() => {
-          this.enable();
-        }, Block.DELAY);
+          this.isTyping = true;
+          this.alert(PLACEHOLDER.default);
+          this.$nextTick(() => {
+            this.focus();
+          });
+        }, BLOCK.delay);
       } else {
+        this.repeatCount++;
+        this.resetCount();
         this.submit();
       }
     },
     update(value) {
-      this.message = emoji.replace_colons(value);
-      this.$emit("update", value);
+      if (value.indexOf(":") !== -1) {
+        this.message = this.emoji.replace_colons(value);
+      }
+      this.$emit("update", String(value));
     },
     submit() {
       this.$emit("submit", examine(this.message));
@@ -119,21 +98,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.chat-input {
-  position: relative;
-  width: 100%;
-}
-.text-input {
-  position: relative;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  outline: none;
-  &:focus {
-    border: 1px solid #2196f3;
-  }
-}
-</style>

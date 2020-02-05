@@ -1,8 +1,8 @@
 <template>
-  <div class="chat-list">
+  <div class="v-chat-list">
     <ul
-      ref="chatScroller"
-      class="chat-scroller"
+      ref="scroller"
+      class="v-chat-scroller"
       @resize="scrollResize($event)"
       @scroll.passive="scrollEvent($event)"
     >
@@ -19,7 +19,7 @@
       href
       v-show="scrolled"
       @click.prevent="clickToBottom"
-      class="chat-latest"
+      class="v-chat-latest"
     >
       <svg viewBox="0 0 24 24">
         <g>
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     mutationObserver() {
-      let el = this.$refs.chatScroller;
+      let el = this.$refs.scroller;
       new MutationObserver(e => {
         const CONFIG = {
           always: false,
@@ -109,7 +109,7 @@ export default {
     resizeObserver() {
       new ResizeObserver(() => {
         if (!this.scrolled) this.clickToBottom();
-      }).observe(this.$refs.chatScroller);
+      }).observe(this.$refs.scroller);
     },
     scrollToBottom(el, smooth) {
       if (typeof el.scroll === "function") {
@@ -123,7 +123,7 @@ export default {
     },
     clickToBottom() {
       this.scrolled = false;
-      this.scrollToBottom(this.$refs.chatScroller);
+      this.scrollToBottom(this.$refs.scroller);
     },
     removeToElement() {
       if (this.messages.length > 10) this.messages.shift();
@@ -131,40 +131,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.chat-list {
-  position: relative;
-  height: 100%;
-}
-.chat-scroller {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  overflow-y: auto;
-  li {
-    padding: 10px;
-  }
-}
-.chat-latest {
-  position: absolute;
-  bottom: 0;
-  width: 32px;
-  height: 32px;
-  margin: 0 calc(50% - 16px) 8px calc(50% - 16px);
-  text-align: center;
-  line-height: 44px;
-  background-color: #2196f3;
-  border-radius: 50%;
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-  }
-}
-</style>

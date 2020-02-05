@@ -1,0 +1,65 @@
+$primary: #7289da;
+
+.v-chat.discord {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  background-color: #36393f;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+
+  .v-chat-head {
+    color: white;
+  }
+
+  .v-chat-foot {
+    padding: 15px 10px;
+  }
+
+  .v-chat-latest {
+    background-color: $primary;
+  }
+
+  .v-chat-item {
+    .name {
+      color: white;
+    }
+
+    .date {
+      font-size: 11px;
+      color: #999;
+    }
+
+    .massage {
+      font-size: 14px;
+      color: #999;
+    }
+
+  }
+
+  .v-chat-entry {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #36393f;
+  }
+
+  .v-chat-input {
+    position: relative;
+    height: 40px;
+    font-size: 16px;
+    color: #ddd;
+    text-indent: 6px;
+    background-color: #40444b;
+    border: 1px solid #40444b;
+    border-radius: 10px;
+    overflow: hidden;
+    outline: none;
+
+    &:focus {
+      border: 1px solid $primary;
+    }
+  }
+}

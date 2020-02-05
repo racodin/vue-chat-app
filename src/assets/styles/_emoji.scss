@@ -1,0 +1,43 @@
+.v-chat-emoji {
+  position: relative;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  .select {
+    padding: 7px 5px;
+    background-color: rgba(0, 0, 0, 0.1);
+
+    a {
+      display: inline-block;
+      margin: 0 3px;
+      padding: 2px;
+      text-decoration: none;
+      border-radius: 3px;
+
+      &:hover,
+      &.active {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+
+  .icon {
+    position: relative;
+    height: 100px;
+    padding: 10px;
+    word-break: break-all;
+    overflow: hidden;
+    overflow-y: auto;
+
+    a {
+      display: inline-block;
+      padding: 2px;
+      text-decoration: none;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}

@@ -1,13 +1,6 @@
 <template>
   <div id="app">
-    <vue-chat
-      :style="{
-        width: '300px',
-        height: '350px',
-        backgroundColor: '#f0f0f0'
-      }"
-      :dataset="chat"
-    />
+    <vue-chat :dataset="chat" />
   </div>
 </template>
 

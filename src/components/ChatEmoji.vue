@@ -1,6 +1,6 @@
 <template>
-  <div class="chat-emoji">
-    <div class="emoji-tab">
+  <div class="v-chat-emoji">
+    <div class="select">
       <a
         href=""
         :class="{ active: tab.name == category.name }"
@@ -10,7 +10,7 @@
         >{{ tab.icon }}</a
       >
     </div>
-    <div class="emoji-list">
+    <div class="icon">
       <a
         href=""
         @click.prevent="selectEmoji(emoji)"
@@ -40,13 +40,12 @@ export default {
   data() {
     return {
       isDisplay: true,
-      emojiList: [],
       category: {},
       tabs: [
         {
           name: "Smileys & People",
           icon: "😃",
-          range: /[\u{1F600}-\u{1F64F}\u{270A}-\u{270D}\u{1F441}-\u{1F47D}\u{1F900}-\u{1F937}\u{1F9D0}-\u{1F9DF}]/gu,
+          range: /[\u{1F441}-\u{1F47D}\u{1F600}-\u{1F64F}\u{1F900}-\u{1F937}\u{1F9D0}-\u{1F9DF}\u{270A}-\u{270D}]/gu,
           emojis: []
         },
         {
@@ -95,22 +94,25 @@ export default {
     };
   },
   mounted() {
-    for (const value in new EmojiConvertor().data) {
-      this.emojiList.push(String.fromCodePoint(parseInt(value, 16)));
-    }
-    this.sortEmoji();
+    this.initEmoji();
     this.selectTab(this.tabs[0]);
   },
   methods: {
+    initEmoji() {
+      for (const value in new EmojiConvertor().data) {
+        let emoji = String.fromCodePoint(parseInt(value, 16));
+        this.tabs.forEach(tab => {
+          if (emoji.match(tab.range)) {
+            tab.emojis.push(emoji);
+          }
+        });
+      }
+      this.tabs.forEach(tab => {
+        tab.emojis = Array.from(new Set(tab.emojis));
+      });
+    },
     selectEmoji(emoji) {
       this.$emit("select", emoji);
-    },
-    sortEmoji() {
-      this.tabs.forEach(tab => {
-        this.emojiList.filter(emoji => {
-          if (emoji.match(tab.range)) tab.emojis.push(emoji);
-        });
-      });
     },
     selectTab(item) {
       this.category = item;
@@ -118,44 +120,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.chat-emoji {
-  position: relative;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-.emoji-tab {
-  padding: 7px 5px;
-  background-color: rgba(0, 0, 0, 0.1);
-  a {
-    display: inline-block;
-    margin: 0 3px;
-    padding: 2px;
-    line-height: 1.3rem;
-    text-decoration: none;
-    border-radius: 3px;
-    &:hover,
-    &.active {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-}
-.emoji-list {
-  position: relative;
-  height: 100px;
-  padding: 10px;
-  word-break: break-all;
-  overflow: hidden;
-  overflow-y: auto;
-  a {
-    display: inline-block;
-    padding: 2px;
-    line-height: 1.3rem;
-    text-decoration: none;
-    border-radius: 3px;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-}
-</style>
