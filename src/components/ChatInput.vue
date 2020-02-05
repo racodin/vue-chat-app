@@ -65,20 +65,28 @@ export default {
     alert(str) {
       this.placeholder = str;
     },
+    count(sec) {
+      this.alert(PLACEHOLDER.count.replace(/\d/g, sec--));
+      this.blockInterval = setInterval(() => {
+        !this.isTyping
+          ? this.alert(PLACEHOLDER.count.replace(/\d/g, sec--))
+          : clearInterval(this.blockInterval);
+      }, 1000);
+    },
     send() {
       if (!this.message) return;
       if (this.repeatCount >= BLOCK.count) {
         this.isTyping = false;
+        this.update();
         this.clear();
-        this.update("");
-        this.alert(PLACEHOLDER.restrict);
+        this.count(BLOCK.delay);
         setTimeout(() => {
           this.isTyping = true;
           this.alert(PLACEHOLDER.default);
           this.$nextTick(() => {
             this.focus();
           });
-        }, BLOCK.delay);
+        }, BLOCK.delay * 1000);
       } else {
         this.repeatCount++;
         this.resetCount();
@@ -86,10 +94,11 @@ export default {
       }
     },
     update(value) {
+      value = !value ? "" : value;
+      this.$emit("update", String(value));
       if (value.indexOf(":") !== -1) {
         this.message = this.emoji.replace_colons(value);
       }
-      this.$emit("update", String(value));
     },
     submit() {
       this.$emit("submit", examine(this.message));

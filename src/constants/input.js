@@ -5,7 +5,8 @@
  */
 export const PLACEHOLDER = Object.freeze({
   default: "Enter your message",
-  restrict: "글쓰기가 잠시 제한되었습니다."
+  count: "다음 채팅까지 0초 남았습니다.",
+  restrict: "글쓰기가 제한 되었습니다."
 });
 
 /**
@@ -15,5 +16,5 @@ export const PLACEHOLDER = Object.freeze({
  */
 export const BLOCK = Object.freeze({
   count: 5,
-  delay: 5000
+  delay: 5 // unit sec
 });
