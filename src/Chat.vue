@@ -74,4 +74,3 @@ export default {
 </script>
 
 <style lang="scss" src="@/assets/styles/chat.scss"></style>
-<style lang="scss" src="@/assets/styles/theme/discord.scss"></style>

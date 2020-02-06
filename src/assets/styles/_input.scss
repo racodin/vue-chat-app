@@ -7,8 +7,10 @@
   position: relative;
   width: 100%;
   padding: 10px;
+  color: $gray-600;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: 1px solid $gray-500;
+  overflow: hidden;
   outline: none;
 
   &:focus {

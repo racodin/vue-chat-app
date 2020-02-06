@@ -22,7 +22,7 @@
 .v-chat-avatar {
   position: relative;
   display: inline-block;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid $gray-200;
   overflow: hidden;
 
   &.circle {
@@ -49,6 +49,6 @@
   svg {
     width: 24px;
     height: 24px;
-    fill: white;
+    fill: $white;
   }
 }
