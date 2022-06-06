@@ -1,9 +1,5 @@
 <template>
-  <span
-    class="avatar"
-    :class="shape"
-    :style="'width:' + width + '; height:' + height + ';'"
-  >
+  <span class="avatar" :class="shape" :style="'width:' + width + '; height:' + height + ';'">
     <img :src="src" :alt="alt" />
   </span>
 </template>
