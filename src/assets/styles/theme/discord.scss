@@ -1,0 +1,71 @@
+$white: white;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #40444b;
+
+$primary: #7289da;
+$secondary: #36393f;
+
+.v-chat {
+  width: 400px;
+  height: 600px;
+  background-color: $secondary;
+  border-radius: 14px;
+}
+
+.v-chat-head {
+  background-color: $secondary;
+}
+
+.v-chat-foot {
+  padding: 15px 10px;
+}
+
+.v-chat-item {
+  .name {
+    color: $white;
+  }
+
+  .date {
+    color: $gray-600;
+  }
+
+  .massage {
+    font-size: 14px;
+    color: $gray-500;
+  }
+}
+
+.v-chat-latest {
+  background-color: $primary;
+}
+
+.v-chat-input {
+  height: 40px;
+  font-size: 16px;
+  color: #ddd;
+  background-color: $gray-800;
+  border: 1px solid $gray-800;
+  border-radius: 10px;
+
+  &:focus {
+    border: 1px solid $gray-800;
+  }
+}
+
+.v-chat-button {
+  &:hover {
+    background-color: $primary;
+  }
+}
+
+.v-chat-emoji {
+  a {
+
+    &:hover,
+    &.active {
+      background-color: $primary;
+    }
+  }
+}

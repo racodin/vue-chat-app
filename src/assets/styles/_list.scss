@@ -1,0 +1,54 @@
+.v-chat-list {
+  position: relative;
+  height: 100%;
+
+  li {
+    padding: 10px;
+  }
+}
+
+.v-chat-scroller {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.v-chat-avatar {
+  position: relative;
+  display: inline-block;
+  border: 1px solid $gray-200;
+  overflow: hidden;
+
+  &.circle {
+    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.v-chat-latest {
+  position: absolute;
+  bottom: 0;
+  width: 32px;
+  height: 32px;
+  margin: 0 calc(50% - 16px) 8px calc(50% - 16px);
+  text-align: center;
+  line-height: 44px;
+  background-color: $primary;
+  border-radius: 50%;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $white;
+  }
+}

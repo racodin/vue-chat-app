@@ -1,28 +1,39 @@
 <template>
-  <div id="chat">
-    <ChatList :items="items" :addItem="item" />
-    <div class="chat-panel">
-      <ChatInputText :limit="limit" @update="updateMessage" @submit="sendMessage" />
-      <ChatInputLimit :length="count" :limit="limit" />
-      <ChatInputEmoji />
+  <div class="v-chat">
+    <div class="v-chat-head">TITLE</div>
+    <div class="v-chat-body">
+      <ChatList :items="items" :addItem="item" />
+      <ChatEmoji v-show="isEmoji" @select="selectEmoji" />
+    </div>
+    <div class="v-chat-foot">
+      <ChatInput
+        :limit="limit"
+        :addEmoji="emojiData"
+        @update="updateMessage"
+        @submit="sendMessage"
+      />
+      <ChatLimit :length="count" :limit="limit" />
+      <ChatEmojiButton @click="isEmoji = !isEmoji" />
     </div>
   </div>
 </template>
 
 <script>
-import "@/utils/prototype";
+import "@/utils/dateFormat";
 import ChatList from "@/components/ChatList";
-import ChatInputText from "@/components/ChatInputText";
-import ChatInputLimit from "@/components/ChatInputLimit";
-import ChatInputEmoji from "@/components/ChatInputEmoji";
+import ChatInput from "@/components/ChatInput";
+import ChatLimit from "@/components/ChatLimit";
+import ChatEmoji from "@/components/ChatEmoji";
+import ChatEmojiButton from "@/components/ChatEmojiButton";
 
 export default {
   name: "Chat",
   components: {
     ChatList,
-    ChatInputText,
-    ChatInputLimit,
-    ChatInputEmoji
+    ChatInput,
+    ChatLimit,
+    ChatEmoji,
+    ChatEmojiButton
   },
   props: {
     dataset: {
@@ -34,6 +45,8 @@ export default {
   },
   data() {
     return {
+      isEmoji: false,
+      emojiData: null,
       count: 0,
       limit: 50,
       item: {},
@@ -52,18 +65,12 @@ export default {
         date: new Date().format("YYYY.MM.DD E a/p hh:mm"),
         message: value
       };
+    },
+    selectEmoji(value) {
+      this.emojiData = value;
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-#chat {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.chat-panel {
-  display: flex;
-}
-</style>
+<style lang="scss" src="@/assets/styles/chat.scss"></style>

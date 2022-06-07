@@ -1,6 +1,11 @@
 <template>
-  <div class="chat-list">
-    <ul ref="chatScroller" class="chat-scroller" @scroll.passive="scrollEvent($event)">
+  <div class="v-chat-list">
+    <ul
+      ref="scroller"
+      class="v-chat-scroller"
+      @resize="scrollResize($event)"
+      @scroll.passive="scrollEvent($event)"
+    >
       <li v-for="item in itemList" :key="item.id">
         <ChatListItem
           :picture="item.picture"
@@ -10,10 +15,17 @@
         />
       </li>
     </ul>
-    <a href v-show="scrolled" @click.prevent="clickToBottom" class="chat-latest">
+    <a
+      href
+      v-show="scrolled"
+      @click.prevent="clickToBottom"
+      class="v-chat-latest"
+    >
       <svg viewBox="0 0 24 24">
         <g>
-          <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z" />
+          <path
+            d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+          />
         </g>
       </svg>
     </a>
@@ -50,7 +62,8 @@ export default {
     };
   },
   mounted() {
-    this.scrollObserver();
+    this.mutationObserver();
+    this.resizeObserver();
     this.scrollEvent = debounce(e => {
       let target = e.target;
       this.scrollTop = target.scrollTop;
@@ -64,8 +77,8 @@ export default {
     }
   },
   methods: {
-    scrollObserver() {
-      let el = this.$refs.chatScroller;
+    mutationObserver() {
+      let el = this.$refs.scroller;
       new MutationObserver(e => {
         const CONFIG = {
           always: false,
@@ -93,6 +106,11 @@ export default {
       }).observe(el, { childList: true, subtree: true });
       this.scrollToBottom(el);
     },
+    resizeObserver() {
+      new ResizeObserver(() => {
+        if (!this.scrolled) this.clickToBottom();
+      }).observe(this.$refs.scroller);
+    },
     scrollToBottom(el, smooth) {
       if (typeof el.scroll === "function") {
         el.scroll({
@@ -105,7 +123,7 @@ export default {
     },
     clickToBottom() {
       this.scrolled = false;
-      this.scrollToBottom(this.$refs.chatScroller);
+      this.scrollToBottom(this.$refs.scroller);
     },
     removeToElement() {
       if (this.messages.length > 10) this.messages.shift();
@@ -113,40 +131,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.chat-list {
-  position: relative;
-  height: 100%;
-}
-.chat-scroller {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  overflow-y: auto;
-  li {
-    padding: 10px;
-  }
-}
-.chat-latest {
-  position: absolute;
-  bottom: 0;
-  width: 32px;
-  height: 32px;
-  margin: 0 calc(50% - 16px) 8px calc(50% - 16px);
-  text-align: center;
-  line-height: 44px;
-  background-color: #2196f3;
-  border-radius: 50%;
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-  }
-}
-</style>

@@ -1,0 +1,19 @@
+.v-chat-entry {
+  position: relative;
+  width: 100%;
+}
+
+.v-chat-input {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  color: $gray-600;
+  box-sizing: border-box;
+  border: 1px solid $gray-500;
+  overflow: hidden;
+  outline: none;
+
+  &:focus {
+    border: 1px solid $primary;
+  }
+}
