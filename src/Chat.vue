@@ -27,7 +27,7 @@ import ChatEmoji from "@/components/ChatEmoji";
 import ChatEmojiButton from "@/components/ChatEmojiButton";
 
 export default {
-  name: "Chat",
+  name: 'Chat-app',
   components: {
     ChatList,
     ChatInput,
